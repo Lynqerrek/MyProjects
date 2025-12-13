@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lynqerrek | Project Hub</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Space Grotesk for headers, Inter for body -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        dark: '#0a0a0a',
+                        card: 'rgba(255, 255, 255, 0.03)',
+                        cardBorder: 'rgba(255, 255, 255, 0.08)',
+                        accent: '#3b82f6',
+                        accentGlow: 'rgba(59, 130, 246, 0.4)'
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'fade-up': 'fadeUp 0.5s ease-out forwards',
+                        'pulse-glow': 'pulseGlow 3s infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        fadeUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 20px rgba(59, 130, 246, 0.1)' },
+                            '50%': { boxShadow: '0 0 40px rgba(59, 130, 246, 0.3)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #e5e7eb;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Gradients */
+        .bg-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #111827 0%, #000000 100%);
+        }
+
+        .blob-1 {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: purple;
+            filter: blur(100px);
+            opacity: 0.2;
+            animation: blob 20s infinite alternate;
+        }
+        .blob-2 {
+            position: absolute;
+            bottom: -10%;
+            right: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: blue;
+            filter: blur(100px);
+            opacity: 0.2;
+            animation: blob 25s infinite alternate-reverse;
+        }
+
+        /* Modern Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(20, 20, 25, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            background: rgba(30, 30, 40, 0.8);
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Shine Effect on Hover */
+        .shine-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        .shine-effect::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(
+                to right,
+                transparent,
+                rgba(255, 255, 255, 0.05),
+                transparent
+            );
+            transform: skewX(-25deg);
+            transition: 0.5s;
+        }
+        .shine-effect:hover::after {
+            left: 200%;
+            transition: 0.7s ease-in-out;
+        }
+
+        /* Avatar Glow */
+        .avatar-container::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            padding: 3px;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+
+        /* Pinned Badge */
+        .pinned-badge {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col items-center py-12 px-4 sm:px-6">
+
+    <!-- Ambient Background -->
+    <div class="bg-mesh">
+        <div class="blob-1"></div>
+        <div class="blob-2"></div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="w-full max-w-lg relative z-10">
+
+        <!-- Initial Loader -->
+        <div id="loader" class="min-h-[60vh] flex flex-col items-center justify-center">
+            <div class="relative w-16 h-16">
+                <div class="absolute inset-0 border-t-2 border-r-2 border-blue-500 rounded-full animate-spin"></div>
+                <div class="absolute inset-2 border-b-2 border-l-2 border-purple-500 rounded-full animate-spin" style="animation-direction: reverse; animation-duration: 1.5s;"></div>
+            </div>
+            <div class="mt-6 font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 tracking-wider animate-pulse">
+                INITIALIZING SYSTEM
+            </div>
+            <p class="text-gray-500 text-xs mt-2 font-mono">Fetching @lynqerrek protocols...</p>
+        </div>
+
+        <!-- Main Content (Hidden initially) -->
+        <div id="profile-content" class="hidden flex-col items-center w-full">
+            
+            <!-- Profile Header -->
+            <header class="flex flex-col items-center text-center w-full mb-10 opacity-0 animate-fade-up" style="animation-delay: 0.1s;">
+                <div class="avatar-container relative mb-5 group cursor-pointer">
+                    <img id="avatar" src="" alt="Profile" 
+                        class="w-32 h-32 rounded-full border-4 border-[#0a0a0a] shadow-2xl object-cover relative z-10 transition-transform duration-500 group-hover:scale-105">
+                    
+                    <!-- Hire Me Indicator -->
+                    <div class="absolute bottom-2 right-2 z-20 flex h-4 w-4">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-4 w-4 bg-green-500 border-2 border-black"></span>
+                    </div>
+                </div>
+
+                <h1 id="display-name" class="font-display text-3xl font-bold text-white tracking-tight mb-1"></h1>
+                <a id="profile-link" href="#" target="_blank" class="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors bg-blue-500/10 px-3 py-1 rounded-full text-sm font-medium mb-4 border border-blue-500/20">
+                    <i class="fa-brands fa-github"></i>
+                    @<span id="display-username"></span>
+                </a>
+                <p id="bio" class="text-gray-400 text-sm max-w-sm leading-relaxed font-light px-4"></p>
+                
+                <!-- Stats Row -->
+                <div class="grid grid-cols-2 gap-4 w-full mt-8">
+                    <div class="glass-card p-4 rounded-2xl flex flex-col items-center justify-center group">
+                        <span id="total-repos" class="font-display text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">0</span>
+                        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-semibold mt-1">Repositories</span>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl flex flex-col items-center justify-center group">
+                        <span id="deployed-projects" class="font-display text-2xl font-bold text-purple-400 group-hover:text-purple-300 transition-colors">0</span>
+                        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-semibold mt-1">Live Projects</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Projects Grid -->
+            <main id="links-container" class="w-full space-y-4 pb-12">
+                <!-- Javascript will inject items here -->
+            </main>
+
+            <!-- Minimal Footer -->
+            <footer class="text-center text-gray-600 text-xs py-8 opacity-0 animate-fade-up" style="animation-delay: 1s;">
+                <p class="font-mono">SYSTEM ONLINE • GITHUB API V3</p>
+                <div class="mt-4 flex justify-center gap-6">
+                    <a href="https://github.com/lynqerrek" target="_blank" class="hover:text-white transition-colors duration-300">
+                        <i class="fa-brands fa-github text-lg"></i>
+                    </a>
+                </div>
+            </footer>
+        </div>
+
+    </div>
+
+    <script>
+        // DOM Elements
+        const loader = document.getElementById('loader');
+        const profileContent = document.getElementById('profile-content');
+        const linksContainer = document.getElementById('links-container');
+        const appContainer = document.getElementById('app');
+
+        // State - HARDCODED USERNAME
+        const currentUsername = 'lynqerrek';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchData(currentUsername);
+        });
+
+        function showError(msg) {
+            const errorP = document.createElement('div');
+            errorP.className = "bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl text-sm text-center mt-4";
+            errorP.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-2"></i> ${msg}`;
+            appContainer.appendChild(errorP);
+        }
+
+        async function fetchData(username) {
+            try {
+                // Fetch User, Repos, and Pinned Repos in parallel
+                const [userRes, reposRes, pinnedRes] = await Promise.allSettled([
+                    fetch(`https://api.github.com/users/${username}`),
+                    fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100&type=owner`),
+                    fetch(`https://gh-pinned-repos.egoist.dev/?username=${username}`)
+                ]);
+
+                // User Data Handling
+                if (userRes.status === 'rejected' || !userRes.value.ok) throw new Error('User protocol failed');
+                const userData = await userRes.value.json();
+
+                // Repos Data Handling
+                if (reposRes.status === 'rejected' || !reposRes.value.ok) throw new Error('Repository scan failed');
+                const reposData = await reposRes.value.json();
+
+                // Pinned Data Handling
+                let pinnedSet = new Set();
+                if (pinnedRes.status === 'fulfilled' && pinnedRes.value.ok) {
+                    try {
+                        const pinnedData = await pinnedRes.value.json();
+                        pinnedData.forEach(p => pinnedSet.add(p.repo));
+                    } catch (e) { console.warn("Pinned fetch warning", e); }
+                }
+
+                // Render
+                renderProfile(userData);
+                
+                const validRepos = reposData.filter(repo => repo.has_pages);
+                
+                // Sort: Pinned first, then date
+                validRepos.sort((a, b) => {
+                    const isAPinned = pinnedSet.has(a.name);
+                    const isBPinned = pinnedSet.has(b.name);
+                    if (isAPinned && !isBPinned) return -1;
+                    if (!isAPinned && isBPinned) return 1;
+                    return new Date(b.updated_at) - new Date(a.updated_at);
+                });
+
+                renderLinks(validRepos, pinnedSet);
+
+                // Transition UI
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                    loader.classList.remove('flex');
+                    profileContent.classList.remove('hidden');
+                    profileContent.classList.add('flex');
+                }, 800); // Slight artificial delay for the "system loading" feel
+
+            } catch (err) {
+                console.error(err);
+                loader.innerHTML = `
+                    <div class="text-red-500 text-4xl mb-4"><i class="fa-solid fa-bug"></i></div>
+                    <p class="text-gray-400">System Error</p>
+                    <p class="text-xs text-red-400 mt-2">${err.message}</p>
+                `;
+            }
+        }
+
+        function renderProfile(user) {
+            document.getElementById('avatar').src = user.avatar_url;
+            document.getElementById('display-name').textContent = user.name || user.login;
+            document.getElementById('display-username').textContent = user.login;
+            document.getElementById('bio').textContent = user.bio || "Full Stack Developer | Building digital experiences";
+            document.getElementById('profile-link').href = user.html_url;
+            document.getElementById('total-repos').textContent = user.public_repos;
+        }
+
+        function renderLinks(repos, pinnedSet) {
+            linksContainer.innerHTML = '';
+            document.getElementById('deployed-projects').textContent = repos.length;
+
+            if (repos.length === 0) {
+                linksContainer.innerHTML = `
+                    <div class="glass-card p-8 rounded-2xl text-center text-gray-500 animate-fade-up">
+                        <i class="fa-solid fa-satellite-dish text-4xl mb-4 opacity-50"></i>
+                        <p>No signal detected.</p>
+                        <p class="text-xs mt-2 opacity-60">Enable GitHub Pages to broadcast projects.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            repos.forEach((repo, index) => {
+                const isPinned = pinnedSet.has(repo.name);
+                
+                let targetUrl = repo.homepage;
+                if (!targetUrl) targetUrl = `https://${currentUsername}.github.io/${repo.name}/`;
+                else if (!targetUrl.startsWith('http')) targetUrl = `https://${targetUrl}`;
+
+                const card = document.createElement('a');
+                card.href = targetUrl;
+                card.target = "_blank";
+                card.rel = "noopener noreferrer";
+                card.className = "block w-full group opacity-0 animate-fade-up";
+                card.style.animationDelay = `${0.2 + (index * 0.1)}s`; // Staggered animation
+
+                // Icon Color Logic based on language
+                const iconColorClass = getLanguageColor(repo.language);
+
+                const pinBadge = isPinned 
+                    ? `<div class="absolute -top-3 right-4 pinned-badge text-white text-[10px] font-bold px-3 py-1 rounded-full z-20 flex items-center gap-1 tracking-wide uppercase">
+                         <i class="fa-solid fa-thumbtack text-[9px]"></i> Featured
+                       </div>`
+                    : '';
+                
+                const borderClass = isPinned ? 'border-blue-500/30 shadow-[0_0_15px_rgba(59,130,246,0.15)]' : '';
+
+                card.innerHTML = `
+                    <div class="glass-card shine-effect relative p-5 rounded-2xl flex items-center gap-5 ${borderClass}">
+                        ${pinBadge}
+                        
+                        <!-- Tech Icon -->
+                        <div class="w-14 h-14 rounded-xl bg-[#0F1115] border border-white/5 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-br ${iconColorClass} opacity-10 group-hover:opacity-20 transition-opacity"></div>
+                            <div class="text-2xl ${getTextColor(repo.language)} relative z-10">
+                                ${getLanguageIcon(repo.language)}
+                            </div>
+                        </div>
+                        
+                        <!-- Text Content -->
+                        <div class="flex-1 min-w-0 flex flex-col justify-center">
+                            <h3 class="font-display font-bold text-lg text-white group-hover:text-blue-400 transition-colors truncate">
+                                ${formatName(repo.name)}
+                            </h3>
+                            <p class="text-gray-400 text-sm truncate font-light mt-0.5">
+                                ${repo.description || "No description provided."}
+                            </p>
+                            
+                            <!-- Mini Tech Tag -->
+                             ${repo.language ? 
+                                `<div class="mt-2 flex items-center">
+                                    <span class="text-[10px] px-2 py-0.5 rounded-md bg-white/5 text-gray-400 border border-white/5">
+                                        ${repo.language}
+                                    </span>
+                                </div>` : ''
+                            }
+                        </div>
+
+                        <!-- Arrow -->
+                        <div class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-gray-500 group-hover:text-white group-hover:border-blue-500/50 group-hover:bg-blue-500/10 transition-all duration-300">
+                            <i class="fa-solid fa-arrow-right -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm"></i>
+                        </div>
+                    </div>
+                `;
+                
+                linksContainer.appendChild(card);
+            });
+        }
+
+        function formatName(name) {
+            return name.replace(/-/g, ' ').replace(/_/g, ' ');
+        }
+
+        function getLanguageColor(lang) {
+            if (!lang) return 'from-gray-500 to-gray-700';
+            lang = lang.toLowerCase();
+            const colors = {
+                'html': 'from-orange-500 to-red-500',
+                'css': 'from-blue-400 to-blue-600',
+                'javascript': 'from-yellow-400 to-yellow-600',
+                'typescript': 'from-blue-500 to-blue-700',
+                'python': 'from-green-400 to-blue-500',
+                'java': 'from-red-400 to-red-600',
+                'vue': 'from-green-400 to-green-600',
+                'react': 'from-cyan-400 to-blue-500'
+            };
+            return colors[lang] || 'from-gray-500 to-gray-700';
+        }
+
+        function getTextColor(lang) {
+            if (!lang) return 'text-gray-400';
+            lang = lang.toLowerCase();
+            const colors = {
+                'html': 'text-orange-500',
+                'css': 'text-blue-500',
+                'javascript': 'text-yellow-400',
+                'typescript': 'text-blue-400',
+                'python': 'text-green-500',
+                'java': 'text-red-500',
+                'vue': 'text-green-400',
+                'react': 'text-cyan-400'
+            };
+            return colors[lang] || 'text-gray-400';
+        }
+
+        function getLanguageIcon(lang) {
+            if (!lang) return '<i class="fa-solid fa-code"></i>';
+            lang = lang.toLowerCase();
+            const map = {
+                'html': '<i class="fa-brands fa-html5"></i>',
+                'css': '<i class="fa-brands fa-css3-alt"></i>',
+                'javascript': '<i class="fa-brands fa-js"></i>',
+                'typescript': '<i class="fa-brands fa-js"></i>',
+                'python': '<i class="fa-brands fa-python"></i>',
+                'java': '<i class="fa-brands fa-java"></i>',
+                'php': '<i class="fa-brands fa-php"></i>',
+                'react': '<i class="fa-brands fa-react"></i>',
+                'vue': '<i class="fa-brands fa-vuejs"></i>',
+                'c++': '<i class="fa-solid fa-c"></i>',
+                'c#': '<i class="fa-brands fa-microsoft"></i>'
+            };
+            return map[lang] || '<i class="fa-solid fa-terminal"></i>';
+        }
+    </script>
+</body>
+</html>
